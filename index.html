@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="A calm, scannable first aid swipe file with Red Cross video refreshers. Open source, no tracking." />
+<title>First Aid Swipe File · Refresh the basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface-2: #efece4;
+    --ink: #1a1d20;
+    --ink-soft: #4a5058;
+    --ink-faint: #7a808a;
+    --rule: #d9d4c7;
+    --accent: #b23a3a;       /* a calm, deeper red — not alarm-red */
+    --accent-soft: #f3dede;
+    --critical: #8a1f1f;
+    --warn: #b8862b;
+    --ok: #3a6b46;
+    --shadow: 0 1px 2px rgba(26,29,32,0.04), 0 8px 24px rgba(26,29,32,0.06);
+    --shadow-lift: 0 2px 4px rgba(26,29,32,0.06), 0 16px 40px rgba(26,29,32,0.10);
+    --display: 'Fraunces', Georgia, serif;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* subtle paper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(26,29,32,0.025) 1px, transparent 1px);
+    background-size: 3px 3px;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 56px 32px 96px;
+  }
+
+  /* ---------- Header ---------- */
+  header.masthead {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .mark {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    background: var(--accent);
+    border-radius: 8px;
+    color: #fff;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1;
+    box-shadow: var(--shadow);
+  }
+
+  .titles h1 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(28px, 4.5vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    font-variation-settings: "opsz" 96;
+  }
+  .titles h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .titles .sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+
+  /* ---------- Intro ---------- */
+  .intro {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .intro p {
+    margin: 0 0 12px;
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .intro p strong { color: var(--ink); font-weight: 600; }
+
+  .emergency-card {
+    background: var(--accent-soft);
+    border: 1px solid #e8c8c8;
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .emergency-card h3 {
+    margin: 0 0 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--critical);
+    font-weight: 500;
+  }
+  .emergency-card p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .emergency-card .num {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--critical);
+    display: block;
+    margin: 4px 0 8px;
+    line-height: 1;
+  }
+
+  /* ---------- Filter row ---------- */
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+    align-items: center;
+  }
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-right: 6px;
+  }
+  .chip {
+    appearance: none;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .chip.active {
+    background: var(--ink);
+    color: var(--surface);
+    border-color: var(--ink);
+  }
+
+  /* ---------- Card grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    appearance: none;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 22px 20px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    font-family: var(--sans);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 160px;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: #c8c2b1;
+  }
+  .card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .card .severity {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .card .severity.critical { color: var(--critical); }
+  .card .severity.urgent { color: var(--warn); }
+  .card .severity.standard { color: var(--ok); }
+
+  .card .severity::before {
+    content: '';
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: 1px;
+    background: currentColor;
+  }
+
+  .card h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.15;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  .card p.summary {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .card .footer-meta {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+  }
+  .card .footer-meta .open {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .card:hover .footer-meta .open::after {
+    transform: translateX(3px);
+  }
+  .card .footer-meta .open::after {
+    content: ' →';
+    display: inline-block;
+    transition: transform 0.15s ease;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,29,32,0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 50;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .modal-backdrop.open { display: block; opacity: 1; }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 51;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px;
+    overflow-y: auto;
+  }
+  .modal.open { display: flex; }
+
+  .modal-inner {
+    background: var(--surface);
+    border-radius: 14px;
+    max-width: 760px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    transform: translateY(8px);
+    opacity: 0;
+    transition: opacity 0.2s ease 0.05s, transform 0.2s ease 0.05s;
+    overflow: hidden;
+  }
+  .modal.open .modal-inner { opacity: 1; transform: translateY(0); }
+
+  .modal-head {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .modal-head .severity {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .modal-head .severity.critical { color: var(--critical); }
+  .modal-head .severity.urgent { color: var(--warn); }
+  .modal-head .severity.standard { color: var(--ok); }
+  .modal-head .severity::before {
+    content: '';
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: 1px;
+    background: currentColor;
+  }
+  .modal-head h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.1;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .modal-head .sub {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    color: var(--ink-soft);
+    font-size: 18px;
+    line-height: 1;
+    transition: all 0.15s ease;
+  }
+  .modal-close:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .modal-body { padding: 28px 32px 32px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 12px;
+    font-weight: 500;
+  }
+
+  .call-911 {
+    background: #fef3f3;
+    border-left: 3px solid var(--critical);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .call-911 strong { color: var(--critical); }
+
+  ol.steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    counter-reset: step;
+  }
+  ol.steps li {
+    counter-increment: step;
+    padding: 12px 0 12px 44px;
+    position: relative;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  ol.steps li:last-child { border-bottom: none; }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 12px;
+    width: 28px; height: 28px;
+    background: var(--ink);
+    color: var(--surface);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  ol.steps li strong { color: var(--ink); font-weight: 600; }
+  ol.steps li em { font-style: italic; color: var(--ink-soft); }
+
+  .video-frame {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--ink);
+    margin-bottom: 8px;
+    border: 1px solid var(--rule);
+  }
+  .video-frame iframe { width: 100%; height: 100%; border: 0; }
+
+  .video-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+  .video-meta a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+  .video-meta a:hover { color: var(--accent); }
+
+  .dont-list {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+  }
+  .dont-list ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dont-list li {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .dont-list li::before {
+    content: '×';
+    position: absolute;
+    left: 0; top: 4px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ---------- Footer ---------- */
+  footer.foot {
+    margin-top: 72px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  footer.foot p { margin: 0 0 4px; }
+  footer.foot a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  footer.foot a:hover { color: var(--accent); }
+  footer.foot .stamp {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    text-align: right;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .wrap { padding: 32px 18px 64px; }
+    .intro { grid-template-columns: 1fr; gap: 24px; }
+    .modal-head, .modal-body { padding-left: 22px; padding-right: 22px; }
+    .modal-head h2 { font-size: 24px; }
+    footer.foot { grid-template-columns: 1fr; }
+    footer.foot .stamp { text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+
+  /* hidden state */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="mark" aria-hidden="true">+</div>
+    <div class="titles">
+      <h1>First Aid <em>Swipe File</em></h1>
+      <div class="sub">A quarterly refresher · Tap a card · Watch · Remember</div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <div>
+      <p><strong>This is a personal study tool, not a substitute for training.</strong> Take a real Red Cross course at least once. This page is what you open between courses, when you want a five-minute refresher on what to actually do.</p>
+      <p>Each card opens to a short list of steps and an embedded video from the Red Cross or another reputable source. Steps are summarized for memory; the video is the authoritative reference.</p>
+    </div>
+    <aside class="emergency-card" aria-label="Emergency reminder">
+      <h3>In an emergency</h3>
+      <span class="num">911</span>
+      <p>Call first if you can. Put the phone on speaker so you can keep your hands free. The dispatcher can talk you through CPR.</p>
+    </aside>
+  </section>
+
+  <div class="filter-row" role="group" aria-label="Filter scenarios by category">
+    <span class="filter-label">Filter</span>
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="core">Core</button>
+    <button class="chip" data-filter="outdoor">Outdoor</button>
+    <button class="chip" data-filter="home">Home</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer class="foot">
+    <div>
+      <p>Open source · MIT licensed · No tracking, no analytics, no cookies.</p>
+      <p>Sources: American Red Cross and British Red Cross. Always defer to 911 dispatch and trained responders.</p>
+    </div>
+    <div class="stamp">v1 · refresh quarterly</div>
+  </footer>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="backdrop"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-inner" id="modalInner"></div>
+</div>
+
+<script>
+  // ---------- Data ----------
+  // Each scenario: id, category, severity, title, summary, when911, steps, donts, video {id, title, source, url}
+  const scenarios = [
+    {
+      id: 'cpr',
+      category: 'core',
+      severity: 'critical',
+      title: 'CPR · Adult',
+      summary: 'Unresponsive, not breathing or only gasping. Hands-only compressions until help arrives.',
+      when911: 'Always. Call 911 first (or have someone else call) before starting compressions.',
+      steps: [
+        '<strong>Check responsiveness.</strong> Tap shoulder, shout. If no response and no normal breathing — go.',
+        '<strong>Call 911</strong> and get an AED if available. Put phone on speaker.',
+        '<strong>Place heel of hand</strong> on the center of the chest, other hand on top, fingers interlocked, arms straight.',
+        '<strong>Push hard, push fast.</strong> About 2 inches deep, 100–120 compressions per minute. Tempo of "Stayin\' Alive."',
+        '<strong>Let the chest fully recoil</strong> between compressions. Don\'t lean.',
+        '<strong>Don\'t stop</strong> until EMS takes over, an AED is ready to shock, or the person starts breathing normally.'
+      ],
+      donts: [
+        'Don\'t worry about cracking ribs — depth matters more than gentleness.',
+        'Don\'t pause to check pulse — keep compressions going.',
+        'Hands-only is fine if you aren\'t trained or comfortable with rescue breaths.'
+      ],
+      video: {
+        id: 'VZqG-tcZvfE',
+        title: 'How to do Compression-Only CPR',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=VZqG-tcZvfE'
+      }
+    },
+    {
+      id: 'aed',
+      category: 'core',
+      severity: 'critical',
+      title: 'AED · Adult',
+      summary: 'Automated external defibrillator. Turn it on. Do exactly what it says.',
+      when911: 'Always. Use AED in tandem with CPR — never instead of it.',
+      steps: [
+        '<strong>Turn the AED on.</strong> It will speak to you. Follow its voice prompts.',
+        '<strong>Expose the chest.</strong> Dry it if wet. Shave thick hair if a razor is in the kit.',
+        '<strong>Place pads as shown</strong> on the diagrams: one upper-right chest, one lower-left side.',
+        '<strong>Stand clear</strong> while the AED analyzes. Don\'t touch the person.',
+        '<strong>If shock advised:</strong> make sure no one is touching, then press the shock button.',
+        '<strong>Resume CPR immediately</strong> after the shock. The AED will re-analyze every 2 minutes.'
+      ],
+      donts: [
+        'Don\'t use on a wet surface or in standing water — move them first.',
+        'Don\'t place pads over a pacemaker bump or a medication patch.',
+        'Don\'t stop CPR to wait for the AED — they work together.'
+      ],
+      video: {
+        id: 'in8j2Q2z3HE',
+        title: 'How to Use an AED on an Adult',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=in8j2Q2z3HE'
+      }
+    },
+    {
+      id: 'choking-conscious',
+      category: 'core',
+      severity: 'critical',
+      title: 'Choking · Conscious',
+      summary: 'Adult or child clutching throat, can\'t cough, speak, or breathe. Universal sign.',
+      when911: 'If obstruction doesn\'t clear after a few cycles, or if the person becomes unresponsive.',
+      steps: [
+        '<strong>Ask:</strong> "Are you choking?" If they nod and can\'t speak — act.',
+        '<strong>Get behind them.</strong> Lean them forward.',
+        '<strong>5 back blows</strong> between the shoulder blades with the heel of your hand.',
+        '<strong>5 abdominal thrusts.</strong> Fist just above the navel, other hand over fist, sharp inward and upward thrusts.',
+        '<strong>Alternate 5 and 5</strong> until the object comes out or the person becomes unresponsive.',
+        '<strong>If they go limp:</strong> lower to the ground and start CPR. Each time you open the airway for breaths, look for the object.'
+      ],
+      donts: [
+        'Don\'t do abdominal thrusts on infants under 1 — use back blows and chest thrusts instead.',
+        'Don\'t blindly sweep a finger in the mouth — only remove an object you can clearly see.',
+        'A coughing person is moving air. Encourage them to keep coughing; don\'t intervene yet.'
+      ],
+      video: {
+        id: 'GCxxvi4gJME',
+        title: 'Caring for a Responsive Choking Adult or Child',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=GCxxvi4gJME'
+      }
+    },
+    {
+      id: 'bleeding',
+      category: 'core',
+      severity: 'critical',
+      title: 'Severe Bleeding',
+      summary: 'Spurting, pooling, or soaking through cloth. Minutes matter.',
+      when911: 'Immediately. Severe bleeding can be fatal in 3–5 minutes.',
+      steps: [
+        '<strong>Call 911.</strong> Put on gloves if you have them.',
+        '<strong>Apply firm, direct pressure</strong> to the wound with gauze, cloth, or your gloved hand.',
+        '<strong>Don\'t lift the dressing</strong> to check. If blood soaks through, add more on top.',
+        '<strong>For life-threatening limb bleeding</strong> that won\'t stop: apply a tourniquet 2–3 inches above the wound (never on a joint).',
+        '<strong>Tighten until bleeding stops.</strong> Note the time the tourniquet went on — write it on the person if you can.',
+        '<strong>Keep them warm and still.</strong> Reassure them. Watch for shock.'
+      ],
+      donts: [
+        'Don\'t remove an impaled object — pack around it instead.',
+        'Don\'t loosen a tourniquet once applied. Leave that to EMS.',
+        'Don\'t give food or water — they may need surgery.'
+      ],
+      video: {
+        id: 'k98ilfQmUWw',
+        title: 'How to use a Tourniquet to Control Life-Threatening Bleeding',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=k98ilfQmUWw'
+      }
+    },
+    {
+      id: 'burns',
+      category: 'core',
+      severity: 'urgent',
+      title: 'Burns',
+      summary: 'Thermal, chemical, or electrical. The first 20 minutes of cooling matter most.',
+      when911: 'Burn larger than your palm, on face/hands/genitals/joints, charred or leathery skin, electrical burns, or any burn on a child or older adult.',
+      steps: [
+        '<strong>Stop the burning.</strong> Remove from heat source. Smother flames; flush chemicals with running water.',
+        '<strong>Cool with running water</strong> (not ice) for at least 20 minutes. Lukewarm to cool — cold enough to be cool, not painful.',
+        '<strong>Remove jewelry and loose clothing</strong> near the burn before swelling starts. Don\'t pull off anything stuck to skin.',
+        '<strong>Cover loosely</strong> with a clean, non-fluffy cloth or cling film. Plastic wrap is excellent — it doesn\'t stick.',
+        '<strong>Keep the rest of the body warm</strong> — large burns lose heat fast and shock follows.',
+        '<strong>Pain management:</strong> ibuprofen or acetaminophen if they can take it.'
+      ],
+      donts: [
+        'No butter, toothpaste, oil, or "home remedies" — they trap heat and cause infection.',
+        'Don\'t pop blisters. They\'re a sterile dressing your body made.',
+        'Don\'t use ice — it can deepen the burn and cause frostbite.'
+      ],
+      video: {
+        id: 'dQozahCH8IE',
+        title: 'First aid for someone who has a burn or scald',
+        source: 'British Red Cross',
+        url: 'https://www.youtube.com/watch?v=dQozahCH8IE'
+      }
+    },
+    {
+      id: 'shock',
+      category: 'core',
+      severity: 'critical',
+      title: 'Shock',
+      summary: 'Pale, cold, clammy skin. Rapid weak pulse. Confusion. The body\'s organs are losing blood flow.',
+      when911: 'Any signs of shock — call immediately. Treat the cause and the shock together.',
+      steps: [
+        '<strong>Call 911.</strong> Treat the underlying cause (bleeding, burn, allergy) first if obvious.',
+        '<strong>Lay them flat on their back.</strong> If they\'re struggling to breathe, let them sit up slightly.',
+        '<strong>Keep them warm</strong> — cover with a blanket, jacket, anything. Insulate from the ground too.',
+        '<strong>Reassure them.</strong> Talk calmly. Stay with them.',
+        '<strong>Don\'t give food or water</strong> — they may vomit or need surgery.',
+        '<strong>Monitor breathing.</strong> Be ready to start CPR if they stop breathing normally.'
+      ],
+      donts: [
+        'Don\'t elevate legs unless you\'re sure there\'s no head, neck, back, or leg injury.',
+        'Don\'t let them get up and "walk it off."',
+        'Don\'t leave them alone — shock progresses fast.'
+      ],
+      video: {
+        id: 'jYtJS1PtNq0',
+        title: 'First Aid for Severe Bleeding (covers shock)',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=jYtJS1PtNq0'
+      }
+    },
+    {
+      id: 'anaphylaxis',
+      category: 'home',
+      severity: 'critical',
+      title: 'Anaphylaxis',
+      summary: 'Severe allergic reaction. Swelling of face/throat, hives, trouble breathing, dizziness. Minutes count.',
+      when911: 'Always. Even if symptoms improve after epinephrine, ER follow-up is required — symptoms can return.',
+      steps: [
+        '<strong>Recognize it.</strong> Hives + breathing trouble, or any two body systems involved (skin, lungs, gut, circulation).',
+        '<strong>Use the epinephrine auto-injector</strong> (EpiPen) into the outer thigh. Through clothing is fine. Hold for several seconds.',
+        '<strong>Call 911 immediately.</strong>',
+        '<strong>Lay the person flat,</strong> legs raised — unless they\'re vomiting or struggling to breathe (then sit up).',
+        '<strong>If symptoms persist after 5–15 minutes</strong> and EMS hasn\'t arrived, a second dose can be given.',
+        '<strong>Note the time</strong> of the injection. Hand the used pen to EMS.'
+      ],
+      donts: [
+        'Don\'t wait to "see if it gets worse." If you\'re unsure, give the epinephrine.',
+        'Don\'t give them anything to drink if their throat is swelling.',
+        'Don\'t skip the ER trip — biphasic reactions can hit hours later.'
+      ],
+      video: {
+        id: 'btlbK4PkhyM',
+        title: 'Breathing Emergencies: Anaphylaxis',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=btlbK4PkhyM'
+      }
+    },
+    {
+      id: 'seizure',
+      category: 'home',
+      severity: 'urgent',
+      title: 'Seizure',
+      summary: 'Sudden uncontrolled jerking, stiffness, or loss of awareness. Your job is to protect them, not stop it.',
+      when911: 'First-time seizure, lasts over 5 minutes, repeats, occurs in water, or person doesn\'t wake afterward.',
+      steps: [
+        '<strong>Note the start time.</strong> If it goes past 5 minutes, call 911.',
+        '<strong>Move dangerous objects away.</strong> Cushion their head with something soft.',
+        '<strong>Loosen anything tight</strong> around the neck.',
+        '<strong>Don\'t restrain them.</strong> Let it run its course.',
+        '<strong>When it stops:</strong> roll them onto their side (recovery position) so saliva drains.',
+        '<strong>Stay until they\'re fully alert.</strong> They\'ll be confused — speak calmly and reassure.'
+      ],
+      donts: [
+        'Never put anything in their mouth. They cannot swallow their tongue.',
+        'Don\'t restrain limbs — you\'ll cause injury.',
+        'Don\'t give food or water until they\'re fully recovered.'
+      ],
+      video: {
+        id: '1SMFUwyEafw',
+        title: 'First aid for someone having a seizure',
+        source: 'British Red Cross',
+        url: 'https://www.youtube.com/watch?v=1SMFUwyEafw'
+      }
+    },
+    {
+      id: 'heatstroke',
+      category: 'outdoor',
+      severity: 'critical',
+      title: 'Heat Stroke',
+      summary: 'Hot skin, confusion or unconsciousness, possibly seizure. Body\'s cooling has failed. Cool fast.',
+      when911: 'Always. Cool aggressively while waiting — every minute over 104°F causes damage.',
+      steps: [
+        '<strong>Call 911.</strong>',
+        '<strong>Move them to shade or AC.</strong> Remove excess clothing.',
+        '<strong>Cool them aggressively.</strong> Cold water immersion up to the neck is best if possible.',
+        '<strong>If no immersion:</strong> spray with cool water and fan, or apply ice packs to neck, armpits, and groin.',
+        '<strong>Don\'t force them to drink</strong> if they\'re confused or vomiting. They could choke.',
+        '<strong>Keep cooling until EMS arrives</strong> or their mental state clears.'
+      ],
+      donts: [
+        'Don\'t give fever-reducing meds (acetaminophen, ibuprofen) — they don\'t work for heat stroke.',
+        'Don\'t use rubbing alcohol on skin — it can be absorbed and is dangerous.',
+        'Don\'t mistake heat stroke for heat exhaustion — confusion and altered mental state mean stroke.'
+      ],
+      video: {
+        id: 'gQswFpT5lZ0',
+        title: 'Heat Safety Tips',
+        source: 'American Red Cross',
+        url: 'https://www.youtube.com/watch?v=gQswFpT5lZ0'
+      }
+    },
+    {
+      id: 'hypothermia',
+      category: 'outdoor',
+      severity: 'urgent',
+      title: 'Hypothermia',
+      summary: 'Shivering, slurred speech, confusion, drowsiness, fumbling hands. Core temperature is dropping.',
+      when911: 'Severe shivering stops, person is confused, or unresponsive. Severe hypothermia is a 911 call.',
+      steps: [
+        '<strong>Get them to shelter.</strong> Out of the wind, off the cold ground.',
+        '<strong>Remove wet clothing.</strong> Replace with dry layers or wrap in blankets, sleeping bag, jacket.',
+        '<strong>Cover the head and neck.</strong> Heat loss is highest there.',
+        '<strong>Warm the core first</strong> — chest, neck, groin. Skin-to-skin contact under blankets if you can.',
+        '<strong>If alert and able to swallow:</strong> warm, sweet, non-alcoholic drinks.',
+        '<strong>Handle gently.</strong> Rough movement of a severely hypothermic person can trigger cardiac arrest.'
+      ],
+      donts: [
+        'No alcohol, no caffeine — they accelerate heat loss.',
+        'Don\'t rub or massage limbs — pushes cold blood toward the heart.',
+        'Don\'t put them in a hot bath — too aggressive can shock the system.'
+      ],
+      video: {
+        id: 'DewzkBh2onc',
+        title: 'First aid for someone with hypothermia',
+        source: 'British Red Cross',
+        url: 'https://www.youtube.com/watch?v=DewzkBh2onc'
+      }
+    },
+    {
+      id: 'sprain',
+      category: 'outdoor',
+      severity: 'standard',
+      title: 'Sprain or Strain',
+      summary: 'Twisted ankle, pulled muscle. Pain, swelling, bruising around a joint. Use RICE.',
+      when911: 'Suspected fracture (deformity, can\'t bear weight, snap heard), numbness, or no improvement in 48–72 hours.',
+      steps: [
+        '<strong>Rest.</strong> Stop using the injured joint or muscle.',
+        '<strong>Ice.</strong> 15–20 minutes at a time, with a cloth between ice and skin. Repeat every couple of hours for the first 1–2 days.',
+        '<strong>Compress.</strong> Wrap with an elastic bandage — snug but not numbing. Loosen if toes/fingers go cold or blue.',
+        '<strong>Elevate</strong> above heart level when possible to reduce swelling.',
+        '<strong>OTC pain relief</strong> like ibuprofen helps with both pain and swelling.',
+        '<strong>If no improvement in 48–72 hours,</strong> see a doctor for imaging.'
+      ],
+      donts: [
+        'No heat for the first 48 hours — it increases swelling.',
+        'Don\'t massage immediately — wait for swelling to subside.',
+        'Don\'t "walk it off" if you can\'t bear weight or felt a pop.'
+      ],
+      video: {
+        id: '3CEiFmVzzyc',
+        title: 'Helping someone who has strains and sprains',
+        source: 'British Red Cross',
+        url: 'https://www.youtube.com/watch?v=3CEiFmVzzyc'
+      }
+    },
+    {
+      id: 'poisoning',
+      category: 'home',
+      severity: 'urgent',
+      title: 'Poisoning',
+      summary: 'Suspected ingestion, inhalation, or exposure to toxic substance. Don\'t guess — call.',
+      when911: 'Unconscious, seizing, struggling to breathe, or known dangerous substance. Otherwise call Poison Control.',
+      steps: [
+        '<strong>Get them away from the source.</strong> Fresh air for inhalation; flush eyes/skin for splashes.',
+        '<strong>Call Poison Control: 1-800-222-1222</strong> (US). Free, 24/7. They tell you exactly what to do.',
+        '<strong>Call 911 if</strong> they\'re unresponsive, seizing, having trouble breathing, or you know the substance is acutely dangerous.',
+        '<strong>Have the container ready.</strong> Read the label. Note time, dose, and weight if you know it.',
+        '<strong>For skin exposure:</strong> remove contaminated clothing, rinse with running water for 15–20 minutes.',
+        '<strong>For eye exposure:</strong> flush with lukewarm water for 15–20 minutes, eye held open.'
+      ],
+      donts: [
+        'Don\'t induce vomiting unless Poison Control specifically tells you to.',
+        'Don\'t give activated charcoal, milk, or "neutralizers" without instruction.',
+        'Don\'t wait for symptoms — call immediately, even if they look fine.'
+      ],
+      video: {
+        id: 'gQswFpT5lZ0',
+        title: 'Always call Poison Control: 1-800-222-1222',
+        source: 'Poison Control (no embedded video — call 24/7)',
+        url: 'https://www.poison.org/'
+      }
+    }
+  ];
+
+  // ---------- Render grid ----------
+  const grid = document.getElementById('grid');
+
+  function renderCards(filter = 'all') {
+    grid.innerHTML = '';
+    const filtered = filter === 'all' ? scenarios : scenarios.filter(s => s.category === filter);
+    filtered.forEach(s => {
+      const card = document.createElement('button');
+      card.className = 'card';
+      card.setAttribute('data-id', s.id);
+      card.setAttribute('aria-label', `Open guide for ${s.title}`);
+      card.innerHTML = `
+        <span class="severity ${s.severity}">${s.severity}</span>
+        <h2>${s.title}</h2>
+        <p class="summary">${s.summary}</p>
+        <div class="footer-meta">
+          <span>${labelForCategory(s.category)}</span>
+          <span class="open">open</span>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(s.id));
+      grid.appendChild(card);
+    });
+  }
+
+  function labelForCategory(c) {
+    return ({ core: 'Core', outdoor: 'Outdoor', home: 'Home' })[c] || c;
+  }
+
+  // ---------- Filter chips ----------
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderCards(chip.dataset.filter);
+    });
+  });
+
+  // ---------- Modal ----------
+  const modal = document.getElementById('modal');
+  const backdrop = document.getElementById('backdrop');
+  const modalInner = document.getElementById('modalInner');
+
+  function openModal(id) {
+    const s = scenarios.find(x => x.id === id);
+    if (!s) return;
+
+    const hasEmbed = s.video && s.video.id && !s.video.source.toLowerCase().includes('no embedded');
+
+    modalInner.innerHTML = `
+      <div class="modal-head">
+        <span class="severity ${s.severity}">${s.severity}</span>
+        <h2 id="modal-title">${s.title}</h2>
+        <p class="sub">${s.summary}</p>
+        <button class="modal-close" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="call-911"><strong>When to call 911:</strong> ${s.when911}</p>
+
+        <p class="section-label">Steps</p>
+        <ol class="steps">
+          ${s.steps.map(step => `<li>${step}</li>`).join('')}
+        </ol>
+
+        <p class="section-label">Avoid</p>
+        <div class="dont-list">
+          <ul>
+            ${s.donts.map(d => `<li>${d}</li>`).join('')}
+          </ul>
+        </div>
+
+        ${hasEmbed ? `
+          <p class="section-label" style="margin-top: 28px;">Video refresher</p>
+          <div class="video-frame">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/${s.video.id}"
+              title="${s.video.title}"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <p class="video-meta">${s.video.title} · <a href="${s.video.url}" target="_blank" rel="noopener">${s.video.source}</a></p>
+        ` : `
+          <p class="section-label" style="margin-top: 28px;">Reference</p>
+          <p class="video-meta">${s.video.title} · <a href="${s.video.url}" target="_blank" rel="noopener">${s.video.source}</a></p>
+        `}
+      </div>
+    `;
+
+    modal.classList.add('open');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    modalInner.querySelector('.modal-close').addEventListener('click', closeModal);
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    // clear iframe to stop video
+    setTimeout(() => { modalInner.innerHTML = ''; }, 200);
+  }
+
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+
+  // initial render
+  renderCards();
+</script>
+
+</body>
+</html>
